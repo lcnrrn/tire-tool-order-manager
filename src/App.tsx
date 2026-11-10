@@ -253,6 +253,7 @@ export default function App() {
           onClose={() => setShowSettings(false)}
           onSaved={() => notify('문자 템플릿을 저장했어요')}
           sync={sync}
+          onToast={notify}
           onBackup={() => exportBackup(orders, getSmsTemplates())}
           onRestore={(list) => {
             const now = Date.now();
@@ -571,7 +572,25 @@ function GoogleSection({ sync }: { sync: Sync }) {
   );
 }
 
-function SettingsModal(props: { sync: Sync; onClose: () => void; onSaved: () => void; onBackup: () => void; onRestore: (o: Order[]) => void }) {
+const PUBLIC_URL = `${typeof location !== 'undefined' ? location.origin : ''}${import.meta.env.BASE_URL}open/`;
+
+function PublicLinkSection({ onToast }: { onToast: (m: string) => void }) {
+  return (
+    <section className="settings-sec no-auto-login">
+      <h4>공개 신청 현황 링크</h4>
+      <p className="muted small">다른 분들께 보여 줄 읽기 전용 페이지예요. 순번·성함·연락처 뒷 4자리·타이어 수량만 보이고 주소는 안 보여요. (공개 목록 파일을 갱신해야 내용이 바뀌어요)</p>
+      <div className="public-link">{PUBLIC_URL}</div>
+      <div className="stack">
+        <button className="btn" onClick={async () => onToast((await copyText(PUBLIC_URL)) ? '공개 링크를 복사했어요' : '복사에 실패했어요')}>
+          <Copy size={18} /> 공개 링크 복사
+        </button>
+        <a className="btn ghost" href={PUBLIC_URL} target="_blank" rel="noreferrer"><Link2 size={18} /> 공개 페이지 열기</a>
+      </div>
+    </section>
+  );
+}
+
+function SettingsModal(props: { sync: Sync; onClose: () => void; onSaved: () => void; onToast: (m: string) => void; onBackup: () => void; onRestore: (o: Order[]) => void }) {
   const [t, setT] = useState<SmsTemplates>(() => getSmsTemplates());
   const [sampleTn, setSampleTn] = useState('');
   const restoreRef = useRef<HTMLInputElement>(null);
@@ -579,6 +598,7 @@ function SettingsModal(props: { sync: Sync; onClose: () => void; onSaved: () => 
   return (
     <Modal title="설정" onClose={props.onClose}>
       <GoogleSection sync={props.sync} />
+      <PublicLinkSection onToast={props.onToast} />
       <section className="settings-sec">
         <h4>문자 템플릿</h4>
         <p className="muted small">

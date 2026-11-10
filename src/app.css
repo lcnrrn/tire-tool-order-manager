@@ -207,3 +207,4 @@ h1 { font-size: clamp(18px, 5.4vw, 22px); white-space: nowrap; font-weight: 800;
   .top-actions .icon-btn, .top-actions .sync-pill { width: 38px; height: 38px; border-radius: 12px; }
   h1 { font-size: clamp(16px, 4.8vw, 20px); }
 }
+.public-link { font-size: 13px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; overflow-wrap: anywhere; color: var(--accent); }
