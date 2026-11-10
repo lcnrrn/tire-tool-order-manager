@@ -4,3 +4,6 @@ seed.json
 *.seed.json
 tire-orders.json
 .env*
+*.xlsx
+*.xls
+*.csv
